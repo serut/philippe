@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vie Associative</title>
+    <meta name="description" content="">
+    <a href="#" onclick="play('part3');">Part 3</a>
+    <a href="#" onclick="play('part4');">Part 4</a>
+    <a href="#" onclick="play('part5');">Part 5</a>
+    <a href="#" onclick="play('part6');">Part 6</a>
+    <a href="#" onclick="play('part7');">Part 7</a>
+    <a href="#" onclick="play('part8');">Part 8</a>
+	<!--
+	<script src="soundmanager2-nodebug-jsmin.js"></script>
+	-->
+	<script src="soundmanager2.js"></script>
+
+	<script type="text/javascript">
+	soundManager.setup({
+		url: './swf/',
+		// optional: use 100% HTML5 mode where available
+		onready: function() {
+			soundManager.createSound({
+				id: 'music',
+				url: '02.ogg'
+			})
+			soundManager.createSound({
+				id: 'intro',
+				url: '01.ogg'
+			});
+			soundManager.createSound({
+				id: 'part3',
+				url: '03.ogg'
+			});
+			soundManager.createSound({
+				id: 'part4',
+				url: '04.ogg'
+			});
+			soundManager.createSound({
+				id: 'part5',
+				url: '05.ogg'
+			});
+			soundManager.createSound({
+				id: 'part6',
+				url: '06.ogg'
+			});
+			soundManager.createSound({
+				id: 'part7',
+				url: '07.ogg'
+			});
+			soundManager.createSound({
+				id: 'part8',
+				url: '08.ogg'
+			});
+			soundManager.play('intro');
+			setTimeout(function(){
+				soundManager.play('music');
+				setInterval(function(){
+					soundManager.play('music')
+				},3158);
+			},2995);
+		},
+		ontimeout: function() {
+			// Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
+		}
+	});
+	function play(i){
+		soundManager.getSoundById('music').setVolume(20);
+		soundManager.play(i);
+		soundManager.getSoundById('music').setVolume(100);
+	}
+	</script>
+</head>
+<body>
+
+</body> 
+</html>
+
+
