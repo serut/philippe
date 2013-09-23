@@ -12,8 +12,10 @@
 </head>
     <a href="#" onclick="play('part3');">Hum</a>
     <a href="#" onclick="play('part4');">Part 4</a>
+    <a href="#" onclick="play('part45');">Part 45</a>
     <a href="#" onclick="play('part5');">Part 5</a>
     <a href="#" onclick="play('part6');">Part 6</a>
+    <a href="#" onclick="play('part65');">Part 65</a>
     <a href="#" onclick="play('part7');">Part 7</a>
     <a href="#" onclick="play('part8');">Part 8</a>
 	<!--
@@ -27,6 +29,10 @@
 		// optional: use 100% HTML5 mode where available
 		onready: function() {
 			var el = {
+				'0' : {
+					id: 'part45',
+					url: '04-5.ogg'
+				},
 				'1' : {
 					id: 'music',
 					url: '02.ogg'
@@ -59,13 +65,18 @@
 					id: 'part8',
 					url: '08.ogg'
 				},
+				'8' : {
+					id: 'part65',
+					url: '06-5.ogg'
+				},
 			}
-			el.each(function(){
+			for(var i= 0; i < el.length; i++)
+			{
 				soundManager.createSound({
-					id: this.id,
-					url: this.url
+					id: el[i].id,
+					url: el[i].url
 				})
-			})
+			}
 			
 			soundManager.play('intro');
 			setTimeout(function(){
