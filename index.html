@@ -21,80 +21,66 @@
 	<!--
 	<script src="soundmanager2-nodebug-jsmin.js"></script>
 	-->
-	<script src="soundmanager2.js"></script>
+	<!-- Note: All SoundJS classes are listed here: -->
+	<script type="text/javascript" src="buzz.min.js"></script>
 
 	<script type="text/javascript">
-	soundManager.setup({
-		url: './swf/',
-		// optional: use 100% HTML5 mode where available
-		onready: function() {
-			var el = {
-				'0' : {
-					id: 'part45',
-					url: '04-5.ogg'
-				},
-				'1' : {
-					id: 'music',
-					url: '02.ogg'
-				},
-				'2' : {
-					id: 'intro',
-					url: '01.ogg'
-				},
-				'3' : {
-					id: 'part3',
-					url: '03.ogg'
-				},
-				'4' : {
-					id: 'part4',
-					url: '04.ogg'
-				},
-				'5' : {
-					id: 'part5',
-					url: '05.ogg'
-				},
-				'6' : {
-					id: 'part6',
-					url: '06.ogg'
-				},
-				'7' : {
-					id: 'part7',
-					url: '07.ogg'
-				},
-				'7' : {
-					id: 'part8',
-					url: '08.ogg'
-				},
-				'8' : {
-					id: 'part65',
-					url: '06-5.ogg'
-				},
-			}
-			for(var i= 0; i < el.length; i++)
-			{
-				soundManager.createSound({
-					id: el[i].id,
-					url: el[i].url
-				})
-			}
-			
-			soundManager.play('intro');
-			setTimeout(function(){
-				soundManager.play('music');
-				setInterval(function(){
-					soundManager.play('music')
-				},3158);
-			},2995);
-		},
-		ontimeout: function() {
-			// Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
+        var sounds = {}; // contains all instance of music
+
+		var el = {
+			'0' : {
+				id: 'intro',
+				url: '01.ogg'
+			},
+			'1' : {
+				id: 'music',
+				url: '02.ogg'
+			},
+			'2' : {
+				id: 'part45',
+				url: '04-5.ogg'
+			},
+			'3' : {
+				id: 'part3',
+				url: '03.ogg'
+			},
+			'4' : {
+				id: 'part4',
+				url: '04.ogg'
+			},
+			'5' : {
+				id: 'part5',
+				url: '05.ogg'
+			},
+			'6' : {
+				id: 'part6',
+				url: '06.ogg'
+			},
+			'7' : {
+				id: 'part7',
+				url: '07.ogg'
+			},
+			'8' : {
+				id: 'part8',
+				url: '08.ogg'
+			},
+			'9' : {
+				id: 'part65',
+				url: '06-5.ogg'
+			},
 		}
-	});
-	function play(i){
-		soundManager.getSoundById('music').setVolume(20);
-		soundManager.play(i);
-		soundManager.getSoundById('music').setVolume(100);
-	}
+
+    	for( var i in el ) {
+		    sounds[el[i]['id']] = new buzz.sound(el[i]['url']);
+		}
+		sounds['intro'].play().bind("ended", function(e) {
+			sounds['music'].loop();
+			sounds['music'].play();
+		})
+		function play(i){
+			sounds['music'].pause();
+			sounds[i].play();
+		}
 	</script>
 </head>
 <body>
