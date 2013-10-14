@@ -8,16 +8,17 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hitman our hero</title>
+    <title>Hitman sampler</title>
+	<link rel="icon" href="favicon.ico"/>
 </head>
-    <a href="#" onclick="play('part3');">Hum</a>
-    <a href="#" onclick="play('part4');">Part 4</a>
-    <a href="#" onclick="play('part45');">Part 45</a>
-    <a href="#" onclick="play('part5');">Part 5</a>
-    <a href="#" onclick="play('part6');">Part 6</a>
-    <a href="#" onclick="play('part65');">Part 65</a>
-    <a href="#" onclick="play('part7');">Part 7</a>
-    <a href="#" onclick="play('part8');">Part 8</a>
+    <a href="#" onclick="play('part3');"><img src="images/hum.png"></a>
+    <a href="#" onclick="play('part4');"><img src="images/PhiFerme.png"></a>
+    <a href="#" onclick="play('part45');"><img src="images/TaGueuleOuv.png"></a>
+    <a href="#" onclick="play('part5');"><img src="images/hum.png"></a>
+    <a href="#" onclick="play('part6');"><img src="images/hum.png"></a>
+    <a href="#" onclick="play('part65');"><img src="images/hum.png"></a>
+    <a href="#" onclick="play('part7');"><img src="images/SalaudFer.png"></a>
+    <a href="#" onclick="play('part8');"><img src="images/Vazy1.png"></a>
 	<!--
 	<script src="soundmanager2-nodebug-jsmin.js"></script>
 	-->
@@ -69,7 +70,7 @@
 				url: '06-5.ogg'
 			},
 		}
-
+		// 
     	for( var i in el ) {
 		    sounds[el[i]['id']] = new buzz.sound(el[i]['url']);
 		}
