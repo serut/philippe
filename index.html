@@ -11,19 +11,20 @@
     <title>Hitman sampler</title>
 	<link rel="icon" href="favicon.ico"/>
 </head>
-    <a href="#" onclick="play('part3');"><img src="images/hum.png"></a>
-    <a href="#" onclick="play('part4');"><img src="images/PhiFerme.png"></a>
-    <a href="#" onclick="play('part45');"><img src="images/TaGueuleOuv.png"></a>
-    <a href="#" onclick="play('part5');"><img src="images/hum.png"></a>
-    <a href="#" onclick="play('part6');"><img src="images/hum.png"></a>
-    <a href="#" onclick="play('part65');"><img src="images/hum.png"></a>
-    <a href="#" onclick="play('part7');"><img src="images/SalaudFer.png"></a>
-    <a href="#" onclick="play('part8');"><img src="images/Vazy1.png"></a>
-	<!--
-	<script src="soundmanager2-nodebug-jsmin.js"></script>
-	-->
-	<!-- Note: All SoundJS classes are listed here: -->
+	<span class="content" data-sound="part3">
+		<img src="img/hum.png" class="first">
+		<img src="img/hum1.png" class="second" style="display:none;">
+    </span>
+    <a href="#" onclick="play('part4');"></a>
+    <a href="#" onclick="play('part45');"></a>
+    <a href="#" onclick="play('part5');"></a>
+    <a href="#" onclick="play('part6');"></a>
+    <a href="#" onclick="play('part65');"></a>
+    <a href="#" onclick="play('part7');"></a>
+    <a href="#" onclick="play('part8');"></a>
+
 	<script type="text/javascript" src="buzz.min.js"></script>
+	<script type="text/javascript" src="jquery.min.js"></script>
 
 	<script type="text/javascript">
         var sounds = {}; // contains all instance of music
@@ -78,9 +79,30 @@
 			sounds['music'].loop();
 			sounds['music'].play();
 		})
+
+		var pictures = {};
+		var speed = 300;
+		var toggled;
+		$(function() {
+			$('.content').each(function(){
+				$(this).mouseenter(function() {
+					play($(this).attr('data-sound'));
+					toggled = $(this);
+					pictures[$(this).attr('data-sound')] = setInterval("togglePic(toggled)",speed);
+				}).mouseleave(function() {
+					play($(this).attr('data-sound'));
+					clearInterval(pictures[$(this).attr('data-sound')]);
+				});
+			})
+		});
 		function play(i){
 			sounds['music'].pause();
 			sounds[i].play();
+		}
+		function togglePic(el){
+			console.log($(el));
+			$(el).find('.first').toggle();
+			$(el).find('.second').toggle();
 		}
 	</script>
 </head>
