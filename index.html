@@ -15,6 +15,34 @@
 		<img src="img/hum.png" class="first">
 		<img src="img/hum1.png" class="second" style="display:none;">
     </span>
+<span class="content" data-sound="part4">
+		<img src="img/PhiFerme.png" class="first">
+		<img src="img/PhiOuvert.png" class="second" style="display:none;">
+    </span>
+<span class="content" data-sound="part45">
+		<img src="img/PhiFerme.png" class="first">
+		<img src="img/PhiOuvert.png" class="second" style="display:none;">
+    </span>
+<span class="content" data-sound="part5">
+		<img src="img/TaGueuleOuv.png" class="first">
+		<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
+    </span>
+<span class="content" data-sound="part6">
+		<img src="img/TaGueuleOuv.png" class="first">
+		<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
+    </span>
+<span class="content" data-sound="part65">
+		<img src="img/TaGueuleOuv.png" class="first">
+		<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
+    </span>
+<span class="content" data-sound="part7">
+		<img src="img/SalaudFer.png" class="first">
+		<img src="img/SalaudOuv.png" class="second" style="display:none;">
+    </span>
+<span class="content" data-sound="part8">
+		<img src="img/Vazy1.png" class="first">
+		<img src="img/Vazy2.png" class="second" style="display:none;">
+    </span>
     <a href="#" onclick="play('part4');"></a>
     <a href="#" onclick="play('part45');"></a>
     <a href="#" onclick="play('part5');"></a>
@@ -81,7 +109,7 @@
 		})
 
 		var pictures = {};
-		var speed = 300;
+		var speed = 150;
 		var toggled;
 		$(function() {
 			$('.content').each(function(){
@@ -90,7 +118,7 @@
 					toggled = $(this);
 					pictures[$(this).attr('data-sound')] = setInterval("togglePic(toggled)",speed);
 				}).mouseleave(function() {
-					play($(this).attr('data-sound'));
+					
 					clearInterval(pictures[$(this).attr('data-sound')]);
 				});
 			})
