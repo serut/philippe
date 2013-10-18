@@ -11,45 +11,38 @@
     <title>Hitman sampler</title>
 	<link rel="icon" href="favicon.ico"/>
 </head>
-	<span class="content" data-sound="part3">
+	<span class="content" data-sound="part3" data-speed="500">
 		<img src="img/hum.png" class="first">
 		<img src="img/hum1.png" class="second" style="display:none;">
     </span>
-<span class="content" data-sound="part4">
+	<span class="content" data-sound="part4" data-speed="200">
 		<img src="img/PhiFerme.png" class="first">
 		<img src="img/PhiOuvert.png" class="second" style="display:none;">
     </span>
-<span class="content" data-sound="part45">
+	<span class="content" data-sound="part45" data-speed="200">
 		<img src="img/PhiFerme.png" class="first">
 		<img src="img/PhiOuvert.png" class="second" style="display:none;">
     </span>
-<span class="content" data-sound="part5">
+	<span class="content" data-sound="part5" data-speed="200">
 		<img src="img/TaGueuleOuv.png" class="first">
 		<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
     </span>
-<span class="content" data-sound="part6">
+	<span class="content" data-sound="part6" data-speed="200">
 		<img src="img/TaGueuleOuv.png" class="first">
 		<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
     </span>
-<span class="content" data-sound="part65">
+	<span class="content" data-sound="part65" data-speed="200">
 		<img src="img/TaGueuleOuv.png" class="first">
 		<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
     </span>
-<span class="content" data-sound="part7">
+	<span class="content" data-sound="part7" data-speed="200">
 		<img src="img/SalaudFer.png" class="first">
 		<img src="img/SalaudOuv.png" class="second" style="display:none;">
     </span>
-<span class="content" data-sound="part8">
+	<span class="content" data-sound="part8" data-speed="200">
 		<img src="img/Vazy1.png" class="first">
 		<img src="img/Vazy2.png" class="second" style="display:none;">
     </span>
-    <a href="#" onclick="play('part4');"></a>
-    <a href="#" onclick="play('part45');"></a>
-    <a href="#" onclick="play('part5');"></a>
-    <a href="#" onclick="play('part6');"></a>
-    <a href="#" onclick="play('part65');"></a>
-    <a href="#" onclick="play('part7');"></a>
-    <a href="#" onclick="play('part8');"></a>
 
 	<script type="text/javascript" src="buzz.min.js"></script>
 	<script type="text/javascript" src="jquery.min.js"></script>
@@ -109,23 +102,46 @@
 		})
 
 		var pictures = {};
-		var speed = 150;
-		var toggled;
 		$(function() {
 			$('.content').each(function(){
 				$(this).mouseenter(function() {
-					play($(this).attr('data-sound'));
-					toggled = $(this);
-					pictures[$(this).attr('data-sound')] = setInterval("togglePic(toggled)",speed);
-				}).mouseleave(function() {
-					
-					clearInterval(pictures[$(this).attr('data-sound')]);
+					bindPic($(this));
+				}).click(function(){
+					bindPic($(this));
 				});
 			})
 		});
 		function play(i){
 			sounds['music'].pause();
-			sounds[i].play();
+			var l;
+			if(sounds[i].getPercent() != 100 && sounds[i].getPercent() != 0){
+				l = Object.keys(sounds).length;
+				sounds[l] = new buzz.sound(sounds[i].sound.currentSrc);
+			}else{
+				l = i;
+			}
+			sounds[l].play();
+			return sounds[l].getDuration() * 1000;
+		}
+		function bindPic(el){
+			var end = play(el.attr('data-sound'));
+			if(typeof pictures[el.attr('data-sound')] == 'undefined'){
+				pictures[el.attr('data-sound')] = {};
+				pictures[el.attr('data-sound')]['duration'] = end;
+			}
+			if(pictures[el.attr('data-sound')]['f'] == null){
+				pictures[el.attr('data-sound')]['f'] = setInterval("togglePic('"+el.attr('data-sound')+"')",el.attr('data-speed'));
+			}
+			pictures[el.attr('data-sound')]['end'] = pictures[el.attr('data-sound')]['duration'] + new Date().getTime();
+		}
+		function togglePic(rel){
+			el = $('span[data-sound='+rel+']')
+			el.find('.first').toggle();
+			el.find('.second').toggle();
+			if(new Date().getTime() > pictures[el.attr('data-sound')]['end'] && el.find('.first').is(':visible')){
+				clearInterval(pictures[el.attr('data-sound')]['f']);
+				pictures[el.attr('data-sound')]['f'] = null;
+			}
 		}
 		function togglePic(el){
 			console.log($(el));
