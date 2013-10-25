@@ -1,8 +1,5 @@
 
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
@@ -11,24 +8,58 @@
     <title>Hitman sampler</title>
 	<link rel="icon" href="favicon.ico"/>
 </head>
-	<span class="content" data-sound="part3">
-		<img src="img/hum.png" class="first">
-		<img src="img/hum1.png" class="second" style="display:none;">
-    </span>
-    <a href="#" onclick="play('part4');"></a>
-    <a href="#" onclick="play('part45');"></a>
-    <a href="#" onclick="play('part5');"></a>
-    <a href="#" onclick="play('part6');"></a>
-    <a href="#" onclick="play('part65');"></a>
-    <a href="#" onclick="play('part7');"></a>
-    <a href="#" onclick="play('part8');"></a>
+<body>
+	<div id="load" style="display:center;">
+		<p id="loading">Chargement en cours ... (<span id="imgLoaded"></span>/<span id="nbImage"></span>)</p>
+		<button id="askNextStep" onclick="nextStep()" style="display:none;">Etape suivante</button>
+	</div>
 
+	<div id="sampler" style="display:none;">
+		<span class="content" data-sound="part3" data-speed="1000">
+			<img src="img/hum.png" class="first">
+			<img src="img/hum1.png" class="second" style="display:none;">
+	    </span>
+		<span class="content" data-sound="part4" data-speed="140">
+			<img src="img/PhiFerme.png" class="first">
+			<img src="img/PhiOuvert.png" class="second" style="display:none;">
+	    </span>
+		<span class="content" data-sound="part45" data-speed="110">
+			<img src="img/PhiFerme.png" class="first">
+			<img src="img/PhiOuvert.png" class="second" style="display:none;">
+	    </span>
+		<span class="content" data-sound="part5" data-speed="110">
+			<img src="img/TaGueuleOuv.png" class="first">
+			<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
+	    </span>
+		<span class="content" data-sound="part6" data-speed="175">
+			<img src="img/TaGueuleOuv.png" class="first">
+			<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
+	    </span>
+		<span class="content" data-sound="part65" data-speed="130">
+			<img src="img/TaGueuleOuv.png" class="first">
+			<img src="img/TaGueuleOuvGrd.png" class="second" style="display:none;">
+	    </span>
+		<span class="content" data-sound="part7" data-speed="150">
+			<img src="img/SalaudFer.png" class="first">
+			<img src="img/SalaudOuv.png" class="second" style="display:none;">
+	    </span>
+		<span class="content" data-sound="part8" data-speed="175">
+			<img src="img/Vazy1.png" class="first">
+			<img src="img/Vazy2.png" class="second" style="display:none;">
+	    </span>
+    </div>
+</body>
 	<script type="text/javascript" src="buzz.min.js"></script>
 	<script type="text/javascript" src="jquery.min.js"></script>
-
+	<script type="text/javascript" src="imagesLoaded.pkgd.min.js"></script>
 	<script type="text/javascript">
+
         var sounds = {}; // contains all instance of music
 
+
+        /**
+        * Loading pictures
+        */
 		var el = {
 			'0' : {
 				id: 'intro',
@@ -71,38 +102,82 @@
 				url: '06-5.ogg'
 			},
 		}
-		// 
     	for( var i in el ) {
-		    sounds[el[i]['id']] = new buzz.sound(el[i]['url']);
+		    sounds[el[i]['id']] = new buzz.sound(el[i]['url']).bind("loadeddata", function(e) {
+			    elementLoaded();
+			});
 		}
+		var nbContentSound = parseInt(i)+1, nbContent,nbContentLoaded = 0;
+		$('body').imagesLoaded().progress(function(instance,image){
+			nbContent = nbContentSound + instance.images.length;
+			elementLoaded();
+		});
+		function elementLoaded(){
+			nbContentLoaded++;
+			$('#load #imgLoaded').html(nbContentLoaded);
+			$('#load #nbImage').html(nbContent);
+			if(nbContentLoaded == nbContent){
+				$('#load #askNextStep').show();
+				$('#load #loading').hide();
+			}
+		}
+		function nextStep(){
+			$('#load').hide();
+			$('#sampler').show();
+		}
+
+		/**
+        * Launch music
+        */
 		sounds['intro'].play().bind("ended", function(e) {
 			sounds['music'].loop();
 			sounds['music'].play();
 		})
 
+		/**
+        * Bind
+        */
 		var pictures = {};
-		var speed = 300;
-		var toggled;
 		$(function() {
 			$('.content').each(function(){
 				$(this).mouseenter(function() {
-					play($(this).attr('data-sound'));
-					toggled = $(this);
-					pictures[$(this).attr('data-sound')] = setInterval("togglePic(toggled)",speed);
-				}).mouseleave(function() {
-					play($(this).attr('data-sound'));
-					clearInterval(pictures[$(this).attr('data-sound')]);
+					bindPic($(this));
+				}).click(function(){
+					bindPic($(this));
 				});
 			})
 		});
 		function play(i){
 			sounds['music'].pause();
-			sounds[i].play();
+			var l;
+			if(sounds[i].getPercent() != 100 && sounds[i].getPercent() != 0){
+				l = Object.keys(sounds).length;
+				sounds[l] = new buzz.sound(sounds[i].sound.currentSrc);
+			}else{
+				l = i;
+			}
+			sounds[l].play();
+			return sounds[l].getDuration() * 1000;
 		}
-		function togglePic(el){
-			console.log($(el));
-			$(el).find('.first').toggle();
-			$(el).find('.second').toggle();
+		function bindPic(el){
+			var end = play(el.attr('data-sound'));
+			if(typeof pictures[el.attr('data-sound')] == 'undefined'){
+				pictures[el.attr('data-sound')] = {};
+				pictures[el.attr('data-sound')]['duration'] = end;
+			}
+			if(pictures[el.attr('data-sound')]['f'] == null){
+				pictures[el.attr('data-sound')]['f'] = setInterval("togglePic('"+el.attr('data-sound')+"')",el.attr('data-speed'));
+			}
+			pictures[el.attr('data-sound')]['end'] = pictures[el.attr('data-sound')]['duration'] + new Date().getTime();
+		}
+		function togglePic(rel){
+			el = $('span[data-sound='+rel+']')
+			el.find('.first').toggle();
+			el.find('.second').toggle();
+			if(new Date().getTime() > pictures[el.attr('data-sound')]['end'] && el.find('.first').is(':visible')){
+				clearInterval(pictures[el.attr('data-sound')]['f']);
+				pictures[el.attr('data-sound')]['f'] = null;
+			}
 		}
 	</script>
 </head>
